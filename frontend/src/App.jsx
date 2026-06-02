@@ -118,11 +118,7 @@ export default function App() {
                     })}
                 </nav>
 
-                {/* Sidebar footer showing user profile placeholder & environment */}
-                <div className="p-4 border-t border-slate-150 dark:border-slate-850 bg-slate-50/50 dark:bg-slate-955/20 text-xs">
-                    <p className="font-semibold text-slate-550 dark:text-slate-400">Environment: Local Dev</p>
-                    <p className="text-slate-400 dark:text-slate-500 mt-0.5">SQLite Database active</p>
-                </div>
+
             </aside>
 
             {/* MOBILE SIDEBAR DRAWERS */}
