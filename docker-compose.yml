@@ -1,0 +1,52 @@
+version: '3.8'
+
+services:
+  # 1. PostgreSQL Database Service
+  db:
+    image: postgres:15-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres_secure_pass
+      POSTGRES_DB: inventory
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d inventory"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # 2. Python FastAPI Backend Service
+  backend:
+    build:
+      context: ./backend
+    ports:
+      - "8000:8000"
+    environment:
+      # We override the SQLite database string with PostgreSQL.
+      # Note 'db' in the URL is resolving to the 'db' service defined above.
+      - DATABASE_URL=postgresql://postgres:postgres_secure_pass@db:5432/inventory
+    depends_on:
+      db:
+        condition: service_healthy
+
+  # 3. React Frontend Service
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "3000:80" # Maps host port 3000 to Nginx container port 80
+    environment:
+      # This env variable tells the React build where the backend API lives.
+      # Because the compiled React bundle executes in the USER's browser (host machine),
+      # it must point to 'localhost:8000', not the internal docker hostname.
+      - VITE_API_URL=http://localhost:8000
+    depends_on:
+      - backend
+
+# Docker volumes to persist database records
+volumes:
+  postgres_data:

@@ -1,0 +1,26 @@
+@import "tailwindcss";
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  /* Set the default sans-serif font family stack to prioritize Outfit and Plus Jakarta Sans */
+  --font-sans: "Outfit", "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+
+  /* Custom utility extensions for micro-animations */
+  --animate-fade-in: fade-in 0.3s ease-out;
+  --animate-scale-up: scale-up 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-slide-right: slide-right 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Define CSS Keyframes */
+  @keyframes fade-in {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes scale-up {
+    from { transform: scale(0.96); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+  @keyframes slide-right {
+    from { transform: translateX(-100%); }
+    to { transform: translateX(0); }
+  }
+}
